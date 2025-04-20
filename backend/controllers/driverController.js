@@ -22,4 +22,31 @@ const addDriver = async (req, res) => {
     }
 };
 
-module.exports = { getDrivers, addDriver };
+// Şöför güncelle
+const updateDriver = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const updated = await Driver.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updated) return res.status(404).json({ message: "Şoför bulunamadı." });
+        res.json(updated);
+    } catch (error) {
+        res.status(500).json({ message: "Güncellenirken hata oluştu." });
+    }
+};
+
+// Şöför sil
+const deleteDriver = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deleted = await Driver.findByIdAndDelete(id);
+        if (!deleted) return res.status(404).json({ message: "Şoför bulunamadı." });
+        res.json({ message: "Şoför silindi." });
+    } catch (error) {
+        res.status(500).json({ message: "Silinirken hata oluştu." });
+    }
+};
+
+
+module.exports = { getDrivers, addDriver, updateDriver, deleteDriver };
