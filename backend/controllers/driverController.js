@@ -40,11 +40,15 @@ const deleteDriver = async (req, res) => {
     const { id } = req.params;
 
     try {
+        // Bu şoföre bağlı araçlardaki referansı temizle
+        await Vehicle.updateMany({ assignedDriver: id }, { $set: { assignedDriver: null } });
+
         const deleted = await Driver.findByIdAndDelete(id);
         if (!deleted) return res.status(404).json({ message: "Şoför bulunamadı." });
-        res.json({ message: "Şoför silindi." });
+
+        res.json({ message: "Şoför silindi ve ilişkili araç güncellendi." });
     } catch (error) {
-        res.status(500).json({ message: "Silinirken hata oluştu." });
+        res.status(500).json({ message: "Şoför silinirken hata oluştu." });
     }
 };
 
