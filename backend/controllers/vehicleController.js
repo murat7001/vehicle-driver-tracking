@@ -22,4 +22,31 @@ const addVehicle = async (req, res) => {
     }
 };
 
-module.exports = { getVehicles, addVehicle };
+// Araç güncelle
+const updateVehicle = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const updated = await Vehicle.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updated) return res.status(404).json({ message: "Araç bulunamadı." });
+        res.json(updated);
+    } catch (error) {
+        res.status(500).json({ message: "Araç güncellenirken hata oluştu." });
+    }
+};
+
+// Araç silme
+const deleteVehicle = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deleted = await Vehicle.findByIdAndDelete(id);
+        if (!deleted) return res.status(404).json({ message: "Araç bulunamadı." });
+        res.json({ message: "Araç silindi." });
+    } catch (error) {
+        res.status(500).json({ message: "Araç silinirken hata oluştu." });
+    }
+};
+
+
+module.exports = { getVehicles, addVehicle, updateVehicle, deleteVehicle };
