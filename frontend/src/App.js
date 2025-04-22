@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Dashboard } from "./pages/Dashboard";
+import  {Dashboard}  from "./pages/Dashboard";
 import { Vehicles } from "./pages/Vehicles";
 import { Drivers } from "./pages/Drivers";
 import { Navbar } from "./components/Navbar";
