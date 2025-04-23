@@ -32,10 +32,16 @@ const ChartComp = ({ type, title, data, width = 300, height = 200 }) => {
 
             {type === "line" && (
                 <LineChart
-                    xAxis={[{ scaleType: "point", data: data.map((d) => d.label) }]}
-                    series={[{ data: data.map((d) => d.value) }]}
-                    width={width}
-                    height={height}
+                    xAxis={[{
+                        scaleType: "point",
+                        data: data.map((d) => d.label),
+                    }]}
+                    series={[{
+                        data: data.map((d) => d.value),
+                    }]}
+                    width={500}
+                    height={300}
+                    grid={{ vertical: true, horizontal: true }}
                 />
             )}
         </div>

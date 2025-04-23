@@ -3,6 +3,7 @@ import { fetchDrivers, fetchVehicles } from "../services/api";
 import { Grid, Typography } from "@mui/material";
 import StatsCard from "../components/StatsCard";
 import ChartComp from "../components/ChartComp";
+import { groupCumulativeByDay } from "../utils/groupCumulativeByDay";
 
 export const Dashboard = () => {
     const [drivers, setDrivers] = useState([]);
@@ -29,6 +30,9 @@ export const Dashboard = () => {
         { label: "Total Drivers", count: drivers.length, color: "#3b82f6" },
     ];
 
+    const driversData = groupCumulativeByDay(drivers);
+    const vehiclesData = groupCumulativeByDay(vehicles);
+
     return (
         <div className="p-6">
             <Typography variant="h4" fontWeight="bold" gutterBottom>
@@ -52,6 +56,18 @@ export const Dashboard = () => {
                 ]}
                 width={350}
                 height={350}
+            />
+
+            <ChartComp
+                type="line"
+                title="Our Drivers"
+                data={driversData}
+            />
+
+            <ChartComp
+                type="line"
+                title="Our Vehicles"
+                data={vehiclesData}
             />
         </div>
     );
