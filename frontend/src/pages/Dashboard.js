@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchDrivers, fetchVehicles } from "../services/api";
 import { Grid, Typography } from "@mui/material";
 import StatsCard from "../components/StatsCard";
+import ChartComp from "../components/ChartComp";
 
 export const Dashboard = () => {
     const [drivers, setDrivers] = useState([]);
@@ -41,6 +42,17 @@ export const Dashboard = () => {
                     </Grid>
                 ))}
             </Grid>
+
+            <ChartComp
+                type="pie"
+                title="Araç Durumu"
+                data={[
+                    { id: 0, value: emptyVehicles, label: "Boşta", color: "blue" },
+                    { id: 1, value: vehicles.length - emptyVehicles, label: "Atanmış", color: "orange" },
+                ]}
+                width={350}
+                height={350}
+            />
         </div>
     );
 };
