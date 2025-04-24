@@ -4,6 +4,7 @@ import { Grid, Typography } from "@mui/material";
 import StatsCard from "../components/StatsCard";
 import ChartComp from "../components/ChartComp";
 import { groupCumulativeByDay } from "../utils/groupCumulativeByDay";
+import RecentList from "../components/RecentList";
 
 export const Dashboard = () => {
     const [drivers, setDrivers] = useState([]);
@@ -68,6 +69,22 @@ export const Dashboard = () => {
                 type="line"
                 title="Our Vehicles"
                 data={vehiclesData}
+            />
+
+            <RecentList
+                title="Son Eklenen Şoförler"
+                items={[...drivers].reverse()}
+                primaryKey="name"
+                secondaryKey="licenseNumber"
+            />
+            <div className="m-4">
+                
+            </div>
+            <RecentList
+                title="Son Eklenen Araçlar"
+                items={[...vehicles].reverse()}
+                primaryKey="brand"
+                secondaryKey="plateNumber"
             />
         </div>
     );
