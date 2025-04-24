@@ -10,6 +10,6 @@ const vehicleSchema = new mongoose.Schema({
         ref: 'Driver',
         default: null
     }
-});
+},{ timestamps: true });
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);

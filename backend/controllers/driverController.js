@@ -1,4 +1,6 @@
 const Driver = require("../models/Driver");
+const Vehicle = require("../models/Vehicle");
+
 
 // Tüm şoförleri getir
 const getDrivers = async (req, res) => {
@@ -48,6 +50,7 @@ const deleteDriver = async (req, res) => {
 
         res.json({ message: "Şoför silindi ve ilişkili araç güncellendi." });
     } catch (error) {
+        console.error("Silme hatası:", error);
         res.status(500).json({ message: "Şoför silinirken hata oluştu." });
     }
 };
