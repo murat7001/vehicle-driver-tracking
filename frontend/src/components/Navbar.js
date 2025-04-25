@@ -9,7 +9,7 @@ export const Navbar = () => {
     ];
 
     return (
-        <nav className='bg-blue-600 px-8 py-10 text-white '>
+        <nav className='bg-blue-600 px-6 py-8 text-white '>
             <div className='flex justify-between '>
                 <Link to={"/"}>
                     <h1 className="text-2xl font-bold">🚛 Vehicle & Driver Panel</h1>

@@ -39,8 +39,8 @@ const ChartComp = ({ type, title, data, width = 300, height = 200 }) => {
                     series={[{
                         data: data.map((d) => d.value),
                     }]}
-                    width={500}
-                    height={300}
+                    width={width}
+                    height={height}
                     grid={{ vertical: true, horizontal: true }}
                 />
             )}
