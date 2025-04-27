@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
 
 export const groupCumulativeByDay = (items) => {
-    // createdAt'e göre sıralayalım
+    if (!items || items.length === 0) return [];
+
+    // createdAt'e göre sıralama
     const sortedItems = [...items].sort((a, b) =>
         dayjs(a.createdAt).isAfter(dayjs(b.createdAt)) ? 1 : -1
     );
@@ -10,20 +12,15 @@ export const groupCumulativeByDay = (items) => {
     let count = 0;
 
     sortedItems.forEach((item) => {
-        const day = dayjs(item.createdAt).format("D MMM"); // örnek: 22 Apr
+        const day = dayjs(item.createdAt).format("D MMM"); // Örnek: "22 Apr"
         count += 1;
-        grouped[day] = count; // her gün toplamı güncelliyoruz
+        grouped[day] = count;
     });
 
-    // Kümülatif doldurma: önceki günlerde veri yoksa boşluğu dolduralım
-    const allDays = Object.keys(grouped);
-    const result = [];
-
-    for (let i = 0; i < allDays.length; i++) {
-        const day = allDays[i];
-        const value = grouped[day];
-        result.push({ label: day, value });
-    }
+    const result = Object.entries(grouped).map(([label, value]) => ({
+        label,
+        value,
+    }));
 
     return result;
 };
