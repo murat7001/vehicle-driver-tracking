@@ -1,11 +1,12 @@
 import { Card, CardContent, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 
-const StatsCard = ({ label, count, color }) => {
+const StatsCard = ({ label, count, color, Icon }) => {
     return (
         <Card
             sx={{
-                minWidth: 200,
-                minHeight: 120,
+                minWidth: 220,
+                minHeight: 140,
                 backgroundColor: color,
                 color: "#fff",
                 borderRadius: 4,
@@ -21,6 +22,11 @@ const StatsCard = ({ label, count, color }) => {
             }}
         >
             <CardContent sx={{ textAlign: "center" }}>
+                {Icon && (
+                    <Box sx={{ mb: 1 }}>
+                        <Icon sx={{ fontSize: 40 }} />
+                    </Box>
+                )}
                 <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>
                     {label}
                 </Typography>

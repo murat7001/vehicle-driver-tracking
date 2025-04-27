@@ -6,6 +6,10 @@ import ChartComp from "../components/ChartComp";
 import { groupCumulativeByDay } from "../utils/groupCumulativeByDay";
 import RecentList from "../components/RecentList";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
+import CarCrashIcon from '@mui/icons-material/CarCrash';
 
 export const Dashboard = () => {
     const [drivers, setDrivers] = useState([]);
@@ -26,10 +30,10 @@ export const Dashboard = () => {
     const emptyVehicles = vehicles.filter((v) => !v.assignedDriver).length;
 
     const stats = [
-        { label: "Empty Driver", count: emptyDrivers, color: "#f59e0b" },
-        { label: "Empty Vehicles", count: emptyVehicles, color: "#ef4444" },
-        { label: "Total Vehicles", count: vehicles.length, color: "#10b981" },
-        { label: "Total Drivers", count: drivers.length, color: "#3b82f6" },
+        { label: "Empty Driver", count: emptyDrivers, color: "#f59e0b", icon: PersonOffIcon },
+        { label: "Empty Vehicles", count: emptyVehicles, color: "#ef4444", icon: CarCrashIcon },
+        { label: "Total Vehicles", count: vehicles.length, color: "#10b981", icon: DirectionsCarIcon },
+        { label: "Total Drivers", count: drivers.length, color: "#3b82f6", icon: PeopleAltIcon },
     ];
 
     const driversData = groupCumulativeByDay(drivers);
@@ -43,7 +47,7 @@ export const Dashboard = () => {
                 <Grid className="flex justify-between" container spacing={3}>
                     {stats.map((item) => (
                         <Grid item xs={12} sm={6} md={3} key={item.label}>
-                            <StatsCard {...item} />
+                            <StatsCard {...item} Icon={item.icon} />
                         </Grid>
                     ))}
                 </Grid>
@@ -91,8 +95,8 @@ export const Dashboard = () => {
             </div>
 
             <div className="flex flex-col gap-4 mt-20 sticky top-10 h-fit">
-                <Button sx={{padding:2, fontSize:16}} variant="contained" color="secondary" endIcon={<ArrowForwardIcon/>}>Check Drivers</Button>
-                <Button sx={{padding:2, fontSize:16}} variant="contained" color="secondary" endIcon={<ArrowForwardIcon/>}>Check Vehicles</Button>
+                <Button sx={{ padding: 2, fontSize: 16 }} variant="contained" color="secondary" endIcon={<ArrowForwardIcon />}>Check Drivers</Button>
+                <Button sx={{ padding: 2, fontSize: 16 }} variant="contained" color="secondary" endIcon={<ArrowForwardIcon />}>Check Vehicles</Button>
             </div>
         </div>
     );
