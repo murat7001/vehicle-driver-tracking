@@ -17,6 +17,12 @@ const columns = [
         minWidth: 170,
         align: 'right',
     },
+    {
+        id: 'actions',
+        label: 'Actions',
+        minWidth: 150,
+        align: 'center',
+    },
 ];
 
 
@@ -24,7 +30,7 @@ export const Drivers = () => {
     const [drivers, setDrivers] = useState([]);
 
     useEffect(() => {
-        const fetchData = async() => {
+        const fetchData = async () => {
             const driversData = await fetchDrivers();
             setDrivers(driversData);
         }
@@ -37,7 +43,7 @@ export const Drivers = () => {
         licenseNumber: driver.licenseNumber,
         phone: driver.phone,
         assignedVehicle: driver.assignedVehicle ? driver.assignedVehicle.plateNumber : "Empty",
-    } ))
+    }))
 
     return (
         <TableComp columns={columns} rows={rows}></TableComp>

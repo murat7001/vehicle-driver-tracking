@@ -53,15 +53,26 @@ export default function TableComp({ columns, rows }) {
                         ) : (
                             rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                .map((row, index) => (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                         {columns.map((column) => {
+                                            if (column.id === "actions") {
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        <button className="mr-3" onClick={() => console.log('Edit:', row)}>
+                                                            ✏️
+                                                        </button>
+                                                        <button className="" onClick={() => console.log('Delete:', row)}>
+                                                            🗑️
+                                                        </button>
+                                                    </TableCell>
+                                                );
+                                            }
+
                                             const value = row[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
-                                                    {column.format && typeof value === "number"
-                                                        ? column.format(value)
-                                                        : value}
+                                                    {value}
                                                 </TableCell>
                                             );
                                         })}
@@ -72,7 +83,7 @@ export default function TableComp({ columns, rows }) {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[5, 10, 15]}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
