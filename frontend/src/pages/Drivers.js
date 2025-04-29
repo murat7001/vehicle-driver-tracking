@@ -1,51 +1,120 @@
-import React, { useEffect, useState } from 'react'
-import TableComp from '../components/TableComp'
-import { fetchDrivers } from '../services/api';
+import React, { useEffect, useState } from 'react';
+import TableComp from '../components/TableComp';
+import EditModal from '../components/EditModal';
+import ConfirmModal from "../components/ConfirmModal";
+import { deleteDriver, fetchDrivers, updateDriver } from '../services/api';
+import * as Yup from 'yup';
 
 const columns = [
     { id: 'name', label: 'Name', minWidth: 170 },
     { id: 'licenseNumber', label: 'License Number', minWidth: 100 },
-    {
-        id: 'phone',
-        label: 'Phone',
-        minWidth: 170,
-        align: 'right',
-    },
-    {
-        id: 'assignedVehicle',
-        label: 'Vehicle',
-        minWidth: 170,
-        align: 'right',
-    },
-    {
-        id: 'actions',
-        label: 'Actions',
-        minWidth: 150,
-        align: 'center',
-    },
+    { id: 'phone', label: 'Phone', minWidth: 170, align: 'right' },
+    { id: 'assignedVehicle', label: 'Vehicle', minWidth: 170, align: 'right' },
+    { id: 'actions', label: 'Actions', minWidth: 150, align: 'center' },
 ];
 
+const driverFields = [
+    { name: "name", label: "Name", type: "text" },
+    { name: "licenseNumber", label: "License Number", type: "text" },
+    { name: "phone", label: "Phone", type: "text" },
+];
+
+const driverValidationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    licenseNumber: Yup.string().required("License Number is required"),
+    phone: Yup.string().required("Phone is required"),
+});
 
 export const Drivers = () => {
     const [drivers, setDrivers] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedDriver, setSelectedDriver] = useState(null);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [selectedDeleteDriver, setSelectedDeleteDriver] = useState(null);
+
+
+    const fetchData = async () => {
+        const driversData = await fetchDrivers();
+        setDrivers(driversData);
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            const driversData = await fetchDrivers();
-            setDrivers(driversData);
-        }
-
         fetchData();
-    }, [])
+    }, []);
+
+    const handleEditClick = (driver) => {
+        setSelectedDriver({
+            id: driver._id,
+            name: driver.name,
+            licenseNumber: driver.licenseNumber,
+            phone: driver.phone,
+        });
+        setModalOpen(true);
+    };
+
+    const handleUpdateDriver = async (updatedData) => {
+        try {
+            if (!selectedDriver?.id) return;
+
+            await updateDriver(selectedDriver.id, updatedData);
+            setModalOpen(false);
+            fetchData(); // Güncellenmiş veriyi tekrar çek
+        } catch (error) {
+            console.error("Şoför güncellenirken hata:", error);
+        }
+    };
+
+    const handleDeleteClick = (driver) => {
+        setSelectedDeleteDriver(driver);
+        setConfirmOpen(true);
+    };
+
+
+    const confirmDeleteDriver = async () => {
+        try {
+            if (!selectedDeleteDriver?._id) return;
+
+            await deleteDriver(selectedDeleteDriver._id);
+            setConfirmOpen(false);
+            fetchData();
+        } catch (error) {
+            console.error("Şoför silinirken hata:", error);
+        }
+    };
+
 
     const rows = drivers.map((driver) => ({
+        _id: driver._id,
         name: driver.name,
         licenseNumber: driver.licenseNumber,
         phone: driver.phone,
         assignedVehicle: driver.assignedVehicle ? driver.assignedVehicle.plateNumber : "Empty",
-    }))
+    }));
 
     return (
-        <TableComp columns={columns} rows={rows}></TableComp>
-    )
-}
+        <>
+            <TableComp
+                columns={columns}
+                rows={rows}
+                onEdit={(driver) => handleEditClick(driver)}
+                onDelete={(driver) => handleDeleteClick(driver)}
+            />
+
+            <EditModal
+                open={modalOpen}
+                handleClose={() => setModalOpen(false)}
+                fields={driverFields}
+                initialValues={selectedDriver || {}}
+                validationSchema={driverValidationSchema}
+                onSubmit={handleUpdateDriver}
+            />
+
+            <ConfirmModal
+                open={confirmOpen}
+                handleClose={() => setConfirmOpen(false)}
+                handleConfirm={confirmDeleteDriver}
+                message={selectedDeleteDriver ? `Do you want to delete the driver named ${selectedDeleteDriver.name} ?` : ""}
+            />
+        </>
+    );
+};

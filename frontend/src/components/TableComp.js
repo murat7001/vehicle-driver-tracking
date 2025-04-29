@@ -9,10 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
 
-
-
-
-export default function TableComp({ columns, rows }) {
+export default function TableComp({ columns, rows, onEdit, onDelete }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -27,7 +24,8 @@ export default function TableComp({ columns, rows }) {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: "10px" }}>
-            <Typography variant='h4' sx={{ margin: "10px", }}>Drivers</Typography>
+            <Typography variant='h4' sx={{ margin: "10px" }}>Drivers</Typography>
+
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -43,6 +41,7 @@ export default function TableComp({ columns, rows }) {
                             ))}
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
                         {rows.length === 0 ? (
                             <TableRow>
@@ -59,10 +58,16 @@ export default function TableComp({ columns, rows }) {
                                             if (column.id === "actions") {
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>
-                                                        <button className="mr-3" onClick={() => console.log('Edit:', row)}>
+                                                        <button
+                                                            className=" mr-3"
+                                                            onClick={() => onEdit(row)}
+                                                        >
                                                             ✏️
                                                         </button>
-                                                        <button className="" onClick={() => console.log('Delete:', row)}>
+                                                        <button
+                                                            className=""
+                                                            onClick={() => onDelete(row)}
+                                                        >
                                                             🗑️
                                                         </button>
                                                     </TableCell>
@@ -82,6 +87,7 @@ export default function TableComp({ columns, rows }) {
                     </TableBody>
                 </Table>
             </TableContainer>
+
             <TablePagination
                 rowsPerPageOptions={[5, 10, 15]}
                 component="div"

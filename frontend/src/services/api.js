@@ -17,3 +17,9 @@ export const fetchVehicles  = async () => {
 
     return data
 }
+
+
+export const updateDriver = (id, updatedData) => API.put(`/drivers/${id}`, updatedData);
+
+
+export const deleteDriver = (id) => API.delete(`/drivers/${id}`);
