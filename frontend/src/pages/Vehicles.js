@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import TableComp from '../components/TableComp';
 import EditModal from '../components/EditModal';
 import ConfirmModal from "../components/ConfirmModal";
-import { fetchVehicles, updateVehicle, deleteVehicle } from '../services/api';
+import { fetchVehicles, updateVehicle, deleteVehicle, addVehicle } from '../services/api';
 import * as Yup from 'yup';
+import AddModal from '../components/AddModal';
 
 const columns = [
     { id: 'plateNumber', label: 'Plate Number', minWidth: 100 },
@@ -34,6 +35,8 @@ export const Vehicles = () => {
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedDeleteVehicle, setSelectedDeleteVehicle] = useState(null);
+    const [addModalOpen, setAddModalOpen] = useState(false);
+
 
     const fetchData = async () => {
         try {
@@ -88,6 +91,15 @@ export const Vehicles = () => {
         }
     };
 
+    const handleAddVehicle = async (newVehicleData) => {
+        try {
+            await addVehicle(newVehicleData);
+            fetchData(); // Yeni veriyi tekrar çek
+        } catch (error) {
+            console.error("Araç eklenirken hata:", error);
+        }
+    };
+
     const rows = vehicles.map((vehicle) => ({
         _id: vehicle._id,
         plateNumber: vehicle.plateNumber,
@@ -105,6 +117,7 @@ export const Vehicles = () => {
                 rows={rows}
                 onEdit={handleEditClick}
                 onDelete={handleDeleteClick}
+                onAdd={() => setAddModalOpen(true)}
             />
 
             <EditModal
@@ -114,6 +127,15 @@ export const Vehicles = () => {
                 initialValues={selectedVehicle || {}}
                 validationSchema={vehicleValidationSchema}
                 onSubmit={handleUpdateVehicle}
+            />
+
+            <AddModal
+                open={addModalOpen}
+                handleClose={() => setAddModalOpen(false)}
+                fields={vehicleFields}
+                initialValues={{ plateNumber: "", brand: "", model: "", year: "" }}
+                validationSchema={vehicleValidationSchema}
+                onSubmit={handleAddVehicle}
             />
 
             <ConfirmModal

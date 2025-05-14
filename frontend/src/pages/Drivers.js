@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import TableComp from '../components/TableComp';
 import EditModal from '../components/EditModal';
 import ConfirmModal from "../components/ConfirmModal";
-import { deleteDriver, fetchDrivers, updateDriver } from '../services/api';
+import AddModal from '../components/AddModal'; // Yeni eklenen AddModal
+import { deleteDriver, fetchDrivers, updateDriver, addDriver } from '../services/api';
 import * as Yup from 'yup';
 
 const columns = [
@@ -31,7 +32,7 @@ export const Drivers = () => {
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedDeleteDriver, setSelectedDeleteDriver] = useState(null);
-
+    const [addModalOpen, setAddModalOpen] = useState(false);
 
     const fetchData = async () => {
         const driversData = await fetchDrivers();
@@ -69,7 +70,6 @@ export const Drivers = () => {
         setConfirmOpen(true);
     };
 
-
     const confirmDeleteDriver = async () => {
         try {
             if (!selectedDeleteDriver?._id) return;
@@ -82,6 +82,14 @@ export const Drivers = () => {
         }
     };
 
+    const handleAddDriver = async (newDriverData) => {
+        try {
+            await addDriver(newDriverData);
+            fetchData(); // Yeni veriyi tekrar çek
+        } catch (error) {
+            console.error("Şoför eklenirken hata:", error);
+        }
+    };
 
     const rows = drivers.map((driver) => ({
         _id: driver._id,
@@ -99,6 +107,7 @@ export const Drivers = () => {
                 rows={rows}
                 onEdit={(driver) => handleEditClick(driver)}
                 onDelete={(driver) => handleDeleteClick(driver)}
+                onAdd={() => setAddModalOpen(true)} // Yeni eklenen onAdd özelliği
             />
 
             <EditModal
@@ -110,11 +119,20 @@ export const Drivers = () => {
                 onSubmit={handleUpdateDriver}
             />
 
+            <AddModal
+                open={addModalOpen}
+                handleClose={() => setAddModalOpen(false)}
+                fields={driverFields}
+                initialValues={{ name: "", licenseNumber: "", phone: "" }}
+                validationSchema={driverValidationSchema}
+                onSubmit={handleAddDriver}
+            />
+
             <ConfirmModal
                 open={confirmOpen}
                 handleClose={() => setConfirmOpen(false)}
                 handleConfirm={confirmDeleteDriver}
-                message={selectedDeleteDriver ? `Do you want to delete the driver named ${selectedDeleteDriver.name} ?` : ""}
+                message={selectedDeleteDriver ? `Do you want to delete the driver named ${selectedDeleteDriver.name}?` : ""}
             />
         </>
     );
