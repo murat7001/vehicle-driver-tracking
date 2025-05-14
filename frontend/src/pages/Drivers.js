@@ -8,8 +8,8 @@ import * as Yup from 'yup';
 const columns = [
     { id: 'name', label: 'Name', minWidth: 170 },
     { id: 'licenseNumber', label: 'License Number', minWidth: 100 },
-    { id: 'phone', label: 'Phone', minWidth: 170, align: 'right' },
-    { id: 'assignedVehicle', label: 'Vehicle', minWidth: 170, align: 'right' },
+    { id: 'phone', label: 'Phone', minWidth: 170, align: 'center' },
+    { id: 'assignedVehicle', label: 'Assigned Vehicle', minWidth: 170, align: 'center' },
     { id: 'actions', label: 'Actions', minWidth: 150, align: 'center' },
 ];
 
@@ -94,6 +94,7 @@ export const Drivers = () => {
     return (
         <>
             <TableComp
+                tableName={"Drivers"}
                 columns={columns}
                 rows={rows}
                 onEdit={(driver) => handleEditClick(driver)}

@@ -12,14 +12,19 @@ export const fetchDrivers = async () => {
     return data
 }
 
+export const updateDriver = (id, updatedData) => API.put(`/drivers/${id}`, updatedData);
+
+
+export const deleteDriver = (id) => API.delete(`/drivers/${id}`);
+
 export const fetchVehicles  = async () => {
     const { data } = await API.get("/vehicles")
 
     return data
 }
 
+export const updateVehicle = (id, updatedData) => API.put(`/vehicles/${id}`, updatedData);
 
-export const updateDriver = (id, updatedData) => API.put(`/drivers/${id}`, updatedData);
+export const deleteVehicle = (id) => API.delete(`/vehicles/${id}`);
 
 
-export const deleteDriver = (id) => API.delete(`/drivers/${id}`);

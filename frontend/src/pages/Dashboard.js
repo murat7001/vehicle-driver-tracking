@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { fetchDrivers, fetchVehicles } from "../services/api";
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import StatsCard from "../components/StatsCard";
 import ChartComp from "../components/ChartComp";
 import { groupCumulativeByDay } from "../utils/groupCumulativeByDay";
 import RecentList from "../components/RecentList";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
@@ -40,8 +39,8 @@ export const Dashboard = () => {
     const vehiclesData = groupCumulativeByDay(vehicles);
 
     return (
-        <div className="p-6 flex justify-between">
-            <div className="mt-20">
+        <div className="p-8">
+            <div className="mt-10">
 
 
                 <Grid className="flex justify-between" container spacing={3}>
@@ -94,10 +93,7 @@ export const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4 mt-20 sticky top-10 h-fit">
-                <Button sx={{ padding: 2, fontSize: 16 }} variant="contained" color="secondary" endIcon={<ArrowForwardIcon />}>Check Drivers</Button>
-                <Button sx={{ padding: 2, fontSize: 16 }} variant="contained" color="secondary" endIcon={<ArrowForwardIcon />}>Check Vehicles</Button>
-            </div>
+            
         </div>
     );
 };

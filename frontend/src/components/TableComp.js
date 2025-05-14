@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
 
-export default function TableComp({ columns, rows, onEdit, onDelete }) {
+export default function TableComp({tableName, columns, rows, onEdit, onDelete }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -24,7 +24,7 @@ export default function TableComp({ columns, rows, onEdit, onDelete }) {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: "10px" }}>
-            <Typography variant='h4' sx={{ margin: "10px" }}>Drivers</Typography>
+            <Typography variant='h4' sx={{ margin: "10px" }}>{tableName}</Typography>
 
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
