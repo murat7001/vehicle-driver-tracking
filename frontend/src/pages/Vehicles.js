@@ -5,6 +5,7 @@ import ConfirmModal from "../components/ConfirmModal";
 import { fetchVehicles, updateVehicle, deleteVehicle, addVehicle } from '../services/api';
 import * as Yup from 'yup';
 import AddModal from '../components/AddModal';
+import AssignDriverModal from '../components/AssignDriverModal';
 
 const columns = [
     { id: 'plateNumber', label: 'Plate Number', minWidth: 100 },
@@ -36,6 +37,7 @@ export const Vehicles = () => {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedDeleteVehicle, setSelectedDeleteVehicle] = useState(null);
     const [addModalOpen, setAddModalOpen] = useState(false);
+    const [assignOpen, setAssignOpen] = useState(false);
 
 
     const fetchData = async () => {
@@ -118,6 +120,7 @@ export const Vehicles = () => {
                 onEdit={handleEditClick}
                 onDelete={handleDeleteClick}
                 onAdd={() => setAddModalOpen(true)}
+                onAssign={()=>setAssignOpen(true)}
             />
 
             <EditModal
@@ -143,6 +146,12 @@ export const Vehicles = () => {
                 handleClose={() => setConfirmOpen(false)}
                 handleConfirm={confirmDeleteVehicle}
                 message={selectedDeleteVehicle ? `Do you want to delete the vehicle with plate number ${selectedDeleteVehicle.plateNumber}?` : ""}
+            />
+
+            <AssignDriverModal
+                open={assignOpen}
+                handleClose={() => setAssignOpen(false)}
+                onAssigned={fetchData}
             />
         </>
     );

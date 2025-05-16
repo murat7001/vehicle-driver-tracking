@@ -10,7 +10,7 @@ import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 
-export default function TableComp({ tableName, columns, rows, onEdit, onDelete, onAdd }) {
+export default function TableComp({ tableName, columns, rows, onEdit, onDelete, onAdd, onAssign }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -90,9 +90,16 @@ export default function TableComp({ tableName, columns, rows, onEdit, onDelete, 
             </TableContainer>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 16px' }}>
-                <Button onClick={onAdd} variant="contained" color="primary" endIcon={<AddIcon />}>
-                    Add
-                </Button>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Button onClick={onAdd} variant="contained" color="primary" endIcon={<AddIcon />}>
+                        Add
+                    </Button>
+                    {tableName=== "Vehicles" && (
+                        <Button onClick={onAssign} variant="outlined" color="secondary">
+                            Assign Driver
+                        </Button>
+                    )}
+                </Box>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 15]}
                     component="div"

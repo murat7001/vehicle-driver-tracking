@@ -30,3 +30,7 @@ export const updateVehicle = (id, updatedData) => API.put(`/vehicles/${id}`, upd
 export const deleteVehicle = (id) => API.delete(`/vehicles/${id}`);
 
 export const addVehicle = (newVehicleData) => API.post('/vehicles', newVehicleData);
+
+
+export const assignDriver = (driverId, vehicleId) =>
+API.put("/assign-driver", { driverId, vehicleId });
