@@ -8,14 +8,33 @@ router.put('/assign-driver', async (req, res) => {
     const { driverId, vehicleId } = req.body;
 
     try {
-        const driver = await Driver.findById(driverId);
         const vehicle = await Vehicle.findById(vehicleId);
-
-        if (!driver || !vehicle) {
-            return res.status(404).json({ message: 'Şoför veya araç bulunamadı.' });
+        if (!vehicle) {
+            return res.status(404).json({ message: 'Araç bulunamadı.' });
         }
 
-        // Şoför ve araca referans ekle
+        // Eğer driverId null ise eşleştirmeyi kaldır
+        if (!driverId) {
+            // Eski şoför varsa, onun da bağlantısını kaldır
+            if (vehicle.assignedDriver) {
+                const oldDriver = await Driver.findById(vehicle.assignedDriver);
+                if (oldDriver) {
+                    oldDriver.assignedVehicle = null;
+                    await oldDriver.save();
+                }
+            }
+
+            vehicle.assignedDriver = null;
+            await vehicle.save();
+            return res.status(200).json({ message: 'Eşleştirme kaldırıldı', vehicle });
+        }
+
+        // Aksi takdirde, yeni eşleştirme yap
+        const driver = await Driver.findById(driverId);
+        if (!driver) {
+            return res.status(404).json({ message: 'Şoför bulunamadı.' });
+        }
+
         driver.assignedVehicle = vehicle._id;
         vehicle.assignedDriver = driver._id;
 
@@ -28,5 +47,6 @@ router.put('/assign-driver', async (req, res) => {
         res.status(500).json({ message: 'Sunucu hatası' });
     }
 });
+
 
 module.exports = router;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TableComp from '../components/TableComp';
 import EditModal from '../components/EditModal';
 import ConfirmModal from "../components/ConfirmModal";
-import { fetchVehicles, updateVehicle, deleteVehicle, addVehicle } from '../services/api';
+import { fetchVehicles, updateVehicle, deleteVehicle, addVehicle, assignDriver } from '../services/api';
 import * as Yup from 'yup';
 import AddModal from '../components/AddModal';
 import AssignDriverModal from '../components/AssignDriverModal';
@@ -38,6 +38,9 @@ export const Vehicles = () => {
     const [selectedDeleteVehicle, setSelectedDeleteVehicle] = useState(null);
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [assignOpen, setAssignOpen] = useState(false);
+    const [unassignVehicle, setUnassignVehicle] = useState(null);
+    const [confirmUnassignOpen, setConfirmUnassignOpen] = useState(false);
+
 
 
     const fetchData = async () => {
@@ -102,6 +105,24 @@ export const Vehicles = () => {
         }
     };
 
+    const handleUnassignClick = (vehicle) => {
+        setUnassignVehicle(vehicle);
+        setConfirmUnassignOpen(true);
+    };
+
+    const confirmUnassignDriver = async () => {
+        try {
+            if (!unassignVehicle?._id) return;
+            await assignDriver(null, unassignVehicle._id); // driverId: null gönderiyoruz
+            setConfirmUnassignOpen(false);
+            setUnassignVehicle(null);
+            fetchData();
+        } catch (error) {
+            console.error("Şoför kaldırılırken hata:", error);
+        }
+    };
+
+
     const rows = vehicles.map((vehicle) => ({
         _id: vehicle._id,
         plateNumber: vehicle.plateNumber,
@@ -120,8 +141,10 @@ export const Vehicles = () => {
                 onEdit={handleEditClick}
                 onDelete={handleDeleteClick}
                 onAdd={() => setAddModalOpen(true)}
-                onAssign={()=>setAssignOpen(true)}
+                onAssign={() => setAssignOpen(true)}
+                onUnassign={handleUnassignClick}
             />
+
 
             <EditModal
                 open={modalOpen}
@@ -153,6 +176,18 @@ export const Vehicles = () => {
                 handleClose={() => setAssignOpen(false)}
                 onAssigned={fetchData}
             />
+
+            <ConfirmModal
+                open={confirmUnassignOpen}
+                handleClose={() => setConfirmUnassignOpen(false)}
+                handleConfirm={confirmUnassignDriver}
+                message={
+                    unassignVehicle
+                        ? `Do you want to unassign driver from ${unassignVehicle.plateNumber}?`
+                        : ""
+                }
+            />
+
         </>
     );
 };

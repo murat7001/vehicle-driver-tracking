@@ -10,7 +10,16 @@ import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 
-export default function TableComp({ tableName, columns, rows, onEdit, onDelete, onAdd, onAssign }) {
+export default function TableComp({
+    tableName,
+    columns,
+    rows,
+    onEdit,
+    onDelete,
+    onAdd,
+    onAssign,
+    onUnassign,
+}) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -56,26 +65,37 @@ export default function TableComp({ tableName, columns, rows, onEdit, onDelete, 
                                 .map((row, index) => (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                         {columns.map((column) => {
+                                            const value = row[column.id];
+
                                             if (column.id === "actions") {
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>
-                                                        <button
-                                                            className=" mr-3"
-                                                            onClick={() => onEdit(row)}
-                                                        >
-                                                            ✏️
-                                                        </button>
-                                                        <button
-                                                            className=""
-                                                            onClick={() => onDelete(row)}
-                                                        >
-                                                            🗑️
-                                                        </button>
+                                                        <button className="mr-3" onClick={() => onEdit(row)}>✏️</button>
+                                                        <button onClick={() => onDelete(row)}>🗑️</button>
                                                     </TableCell>
                                                 );
                                             }
 
-                                            const value = row[column.id];
+                                            if (column.id === "assignedDriver") {
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        {value !== "Empty" ? (
+                                                            <>
+                                                                {value}
+                                                                <button
+                                                                    onClick={() => onUnassign(row)}
+                                                                    className="ml-2 hover:scale-125 transition-transform duration-200"
+                                                                    title="Remove driver"
+                                                                >
+                                                                    ❌
+                                                                </button>
+
+                                                            </>
+                                                        ) : "Empty"}
+                                                    </TableCell>
+                                                );
+                                            }
+
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -94,7 +114,7 @@ export default function TableComp({ tableName, columns, rows, onEdit, onDelete, 
                     <Button onClick={onAdd} variant="contained" color="primary" endIcon={<AddIcon />}>
                         Add
                     </Button>
-                    {tableName=== "Vehicles" && (
+                    {tableName === "Vehicles" && (
                         <Button onClick={onAssign} variant="outlined" color="secondary">
                             Assign Driver
                         </Button>
