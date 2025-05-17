@@ -12,7 +12,11 @@ const RecentList = ({ title, items, primaryKey, secondaryKey }) => {
                         <ListItem key={index} divider>
                             <ListItemText
                                 primary={item[primaryKey]}
-                                secondary={item[secondaryKey]}
+                                secondary={
+                                    typeof secondaryKey === 'function'
+                                        ? secondaryKey(item)
+                                        : item[secondaryKey]
+                                }
                             />
                         </ListItem>
                     ))}

@@ -14,6 +14,12 @@ export const Dashboard = () => {
     const [drivers, setDrivers] = useState([]);
     const [vehicles, setVehicles] = useState([]);
 
+    const recentAssignedVehicles = [...vehicles]
+        .filter(v => v.assignedAt)
+        .sort((a, b) => new Date(b.assignedAt) - new Date(a.assignedAt))
+        .slice(0, 5);
+
+
     useEffect(() => {
         const fetchDatas = async () => {
             const driversData = await fetchDrivers();
@@ -85,6 +91,20 @@ export const Dashboard = () => {
 
                     </div>
                     <RecentList
+                        title="Son Atanan Araçlar"
+                        items={recentAssignedVehicles}
+                        primaryKey="plateNumber"
+                        secondaryKey={(item) =>
+                            item.assignedDriver
+                                ? `${item.assignedDriver.name} • ${new Date(item.assignedAt).toLocaleDateString('tr-TR')}`
+                                : new Date(item.assignedAt).toLocaleDateString('tr-TR')
+                        }
+                    />
+
+                    <div className="m-4">
+
+                    </div>
+                    <RecentList
                         title="Son Eklenen Araçlar"
                         items={[...vehicles].reverse()}
                         primaryKey="brand"
@@ -93,7 +113,7 @@ export const Dashboard = () => {
                 </div>
             </div>
 
-            
+
         </div>
     );
 };

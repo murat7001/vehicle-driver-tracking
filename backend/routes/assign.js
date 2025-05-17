@@ -25,7 +25,9 @@ router.put('/assign-driver', async (req, res) => {
             }
 
             vehicle.assignedDriver = null;
+            vehicle.assignedAt = null; // 🔴 atama tarihi temizleniyor
             await vehicle.save();
+
             return res.status(200).json({ message: 'Eşleştirme kaldırıldı', vehicle });
         }
 
@@ -37,6 +39,7 @@ router.put('/assign-driver', async (req, res) => {
 
         driver.assignedVehicle = vehicle._id;
         vehicle.assignedDriver = driver._id;
+        vehicle.assignedAt = new Date(); // 🟢 atama tarihi kaydediliyor
 
         await driver.save();
         await vehicle.save();
@@ -47,6 +50,5 @@ router.put('/assign-driver', async (req, res) => {
         res.status(500).json({ message: 'Sunucu hatası' });
     }
 });
-
 
 module.exports = router;
