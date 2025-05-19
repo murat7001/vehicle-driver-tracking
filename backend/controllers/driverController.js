@@ -1,6 +1,6 @@
+const bcrypt = require("bcryptjs");
 const Driver = require("../models/Driver");
 const Vehicle = require("../models/Vehicle");
-
 
 // Tüm şoförleri getir
 const getDrivers = async (req, res) => {
@@ -12,14 +12,40 @@ const getDrivers = async (req, res) => {
     }
 };
 
-// Yeni şoför ekle
+// Yeni şoför ekle (admin eklerken veya kullanıcı oluştururken)
 const addDriver = async (req, res) => {
     try {
-        const { name, licenseNumber, phone, assignedVehicle } = req.body;
-        const newDriver = new Driver({ name, licenseNumber, phone, assignedVehicle });
+        const {
+            name,
+            licenseNumber,
+            phone,
+            assignedVehicle,
+            email,
+            password,
+            role
+        } = req.body;
+
+        const existing = await Driver.findOne({ email });
+        if (existing) {
+            return res.status(400).json({ message: "Bu email zaten kayıtlı." });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newDriver = new Driver({
+            name,
+            licenseNumber,
+            phone,
+            assignedVehicle,
+            email,
+            password: hashedPassword,
+            role: role || "driver"
+        });
+
         await newDriver.save();
         res.status(201).json(newDriver);
     } catch (error) {
+        console.error("Şoför eklenirken hata:", error);
         res.status(400).json({ message: "Şoför eklenirken hata oluştu" });
     }
 };
@@ -54,6 +80,5 @@ const deleteDriver = async (req, res) => {
         res.status(500).json({ message: "Şoför silinirken hata oluştu." });
     }
 };
-
 
 module.exports = { getDrivers, addDriver, updateDriver, deleteDriver };
