@@ -22,7 +22,14 @@ const Login = () => {
             try {
                 const res = await login(values);
                 localStorage.setItem('token', res.data.token);
-                navigate('/dashboard');
+
+                const decoded = JSON.parse(atob(res.data.token.split('.')[1]));
+
+                if (decoded.role === 'admin') {
+                    navigate('/dashboard');
+                } else if (decoded.role === 'driver') {
+                    navigate('/my-vehicle');
+                }
             } catch (err) {
                 setErrors({ general: 'Login failed. Please check your credentials.' });
             } finally {
@@ -74,7 +81,7 @@ const Login = () => {
                         variant="outlined"
                     />
 
-                    
+
 
                     {formik.errors.general && (
                         <Typography color="error" className="text-sm text-center">

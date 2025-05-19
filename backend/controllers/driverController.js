@@ -81,4 +81,21 @@ const deleteDriver = async (req, res) => {
     }
 };
 
-module.exports = { getDrivers, addDriver, updateDriver, deleteDriver };
+const updateDriverLocation = async (req, res) => {
+    const { id } = req.params;
+    const { latitude, longitude } = req.body;
+    try {
+        const updated = await Driver.findByIdAndUpdate(
+            id,
+            { location: { latitude, longitude } },
+            { new: true }
+        );
+        console.log("UPDATED DRIVER:", updated);
+        res.json(updated);
+    } catch (error) {
+        console.error("LOCATION UPDATE ERROR:", error);
+        res.status(500).json({ message: 'Location update failed.' });
+    }
+};
+
+module.exports = { getDrivers, addDriver, updateDriver, deleteDriver, updateDriverLocation };

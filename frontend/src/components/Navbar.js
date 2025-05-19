@@ -1,28 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
 export const Navbar = () => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [role, setRole] = useState(null);
 
-    const navItems = [
-        { name: "Dashboard", path: "/" },
-        { name: "Drivers", path: "/drivers" },
-        { name: "Vehicles", path: "/vehicles" }
-    ];
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decoded = JSON.parse(atob(token.split('.')[1]));
+                setRole(decoded.role);
+            } catch (err) {
+                console.error("Invalid token.");
+                setRole(null);
+            }
+        }
+    }, []);
 
     const handleLogoutConfirm = () => {
         localStorage.removeItem("token");
         navigate("/login");
     };
 
+    // Navigation options based on role
+    const adminNavItems = [
+        { name: "Dashboard", path: "/" },
+        { name: "Drivers", path: "/drivers" },
+        { name: "Vehicles", path: "/vehicles" }
+    ];
+
+    const driverNavItems = [
+        { name: "My Vehicle", path: "/my-vehicle" }
+    ];
+
+    const navItems = role === 'admin' ? adminNavItems : role === 'driver' ? driverNavItems : [];
+
     return (
         <>
             <nav className="bg-blue-600 px-6 py-4 text-white shadow-md">
                 <div className="flex justify-between items-center">
                     <Link to="/">
-                        <h1 className="text-2xl font-bold hover:text-blue-200 transition">🚛 Vehicle & Driver Panel</h1>
+                        <h1 className="text-2xl font-bold hover:text-blue-200 transition">
+                            🚛 Vehicle & Driver Panel
+                        </h1>
                     </Link>
 
                     <div className="flex items-center gap-6">
@@ -44,7 +67,7 @@ export const Navbar = () => {
                 </div>
             </nav>
 
-            {/* Confirmation Dialog */}
+            {/* Logout confirmation modal */}
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <DialogTitle>Confirm Logout</DialogTitle>
                 <DialogContent>

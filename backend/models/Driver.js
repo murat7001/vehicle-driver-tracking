@@ -11,6 +11,10 @@ const driverSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicle',
         default: null
+    },
+    location: {
+        latitude: Number,
+        longitude: Number
     }
 });
 

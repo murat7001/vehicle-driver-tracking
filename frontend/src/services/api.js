@@ -37,3 +37,6 @@ export const assignDriver = (driverId, vehicleId) =>
 
 // Giriş işlemi
 export const login = (credentials) => axios.post("http://localhost:5000/api/auth/login", credentials);
+
+export const updateDriverLocation = (id, location) =>
+    API.put(`/drivers/${id}/location`, location);

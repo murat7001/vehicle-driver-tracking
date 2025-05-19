@@ -4,6 +4,7 @@ import { Vehicles } from "./pages/Vehicles";
 import { Drivers } from "./pages/Drivers";
 import { Navbar } from "./components/Navbar";
 import Login from "./pages/Login";
+import MyVehicle from './pages/MyVehicle';
 import { useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
@@ -45,6 +46,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="/my-vehicle" element={<ProtectedRoute><MyVehicle /></ProtectedRoute>} />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
