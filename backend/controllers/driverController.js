@@ -90,10 +90,8 @@ const updateDriverLocation = async (req, res) => {
             { location: { latitude, longitude } },
             { new: true }
         );
-        console.log("UPDATED DRIVER:", updated);
         res.json(updated);
     } catch (error) {
-        console.error("LOCATION UPDATE ERROR:", error);
         res.status(500).json({ message: 'Location update failed.' });
     }
 };

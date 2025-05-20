@@ -25,18 +25,34 @@ const columns = [
     { id: 'actions', label: 'Actions', minWidth: 150, align: 'center' },
 ];
 
-const driverFields = [
+const addDriverFields = [
     { name: "name", label: "Name", type: "text" },
     { name: "licenseNumber", label: "License Number", type: "text" },
     { name: "phone", label: "Phone", type: "text" },
-    { name: "email", label: "Email", type: "email" }, // ✅ Yeni eklendi
+    { name: "email", label: "Email", type: "email" },
+    { name: "password", label: "Password", type: "password" }
 ];
 
-const driverValidationSchema = Yup.object({
+const editDriverFields = [
+    { name: "name", label: "Name", type: "text" },
+    { name: "licenseNumber", label: "License Number", type: "text" },
+    { name: "phone", label: "Phone", type: "text" },
+    { name: "email", label: "Email", type: "email" },
+];
+
+const addDriverValidationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     licenseNumber: Yup.string().required("License Number is required"),
     phone: Yup.string().required("Phone is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"), // ✅ Yeni
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required")
+});
+
+const editDriverValidationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    licenseNumber: Yup.string().required("License Number is required"),
+    phone: Yup.string().required("Phone is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
 });
 
 export const Drivers = () => {
@@ -128,23 +144,24 @@ export const Drivers = () => {
             <EditModal
                 open={modalOpen}
                 handleClose={() => setModalOpen(false)}
-                fields={driverFields}
+                fields={editDriverFields}
                 initialValues={selectedDriver || {}}
-                validationSchema={driverValidationSchema}
+                validationSchema={editDriverValidationSchema}
                 onSubmit={handleUpdateDriver}
             />
 
             <AddModal
                 open={addModalOpen}
                 handleClose={() => setAddModalOpen(false)}
-                fields={driverFields}
+                fields={addDriverFields}
                 initialValues={{
                     name: "",
                     licenseNumber: "",
                     phone: "",
-                    email: ""
+                    email: "",
+                    password: ""
                 }}
-                validationSchema={driverValidationSchema}
+                validationSchema={addDriverValidationSchema}
                 onSubmit={handleAddDriver}
             />
 
