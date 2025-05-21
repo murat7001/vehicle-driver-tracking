@@ -87,15 +87,13 @@ A full-stack web application for managing vehicle and driver assignments with ro
 cd backend
 npm install
 npm start
-
+```
 ### Frontend
 ```bash
 cd frontend
 npm install
 npm start
-
-🤝 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+```
 
 ## 📸 Screenshots
 
