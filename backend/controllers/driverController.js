@@ -53,12 +53,20 @@ const addDriver = async (req, res) => {
 // Şöför güncelle
 const updateDriver = async (req, res) => {
     const { id } = req.params;
+    const updateData = { ...req.body };
 
     try {
-        const updated = await Driver.findByIdAndUpdate(id, req.body, { new: true });
+        // Eğer yeni bir şifre geldiyse hashle
+        if (updateData.password) {
+            updateData.password = await bcrypt.hash(updateData.password, 10);
+        }
+
+        const updated = await Driver.findByIdAndUpdate(id, updateData, { new: true });
         if (!updated) return res.status(404).json({ message: "Şoför bulunamadı." });
+
         res.json(updated);
     } catch (error) {
+        console.error("Güncelleme hatası:", error);
         res.status(500).json({ message: "Güncellenirken hata oluştu." });
     }
 };

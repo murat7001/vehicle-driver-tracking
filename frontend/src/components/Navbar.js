@@ -36,6 +36,7 @@ export const Navbar = () => {
     ];
 
     const driverNavItems = [
+        { name: "Dashboard", path: "/" },
         { name: "My Vehicle", path: "/my-vehicle" }
     ];
 
