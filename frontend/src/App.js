@@ -5,7 +5,6 @@ import { Drivers } from "./pages/Drivers";
 import { Navbar } from "./components/Navbar";
 import Login from "./pages/Login";
 import MyVehicle from './pages/MyVehicle';
-import { useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -13,10 +12,9 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-  const location = useLocation();
   return (
     <div className="min-h-screen flex flex-col">
-      {location.pathname !== "/login" && <Navbar />}
+      <Navbar/>
 
       <main className="flex-1 p-4">
         <Routes>

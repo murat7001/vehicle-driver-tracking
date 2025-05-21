@@ -6,9 +6,10 @@ export const Navbar = () => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [role, setRole] = useState(null);
+    const token = localStorage.getItem('token');
 
+    
     useEffect(() => {
-        const token = localStorage.getItem('token');
         if (token) {
             try {
                 const decoded = JSON.parse(atob(token.split('.')[1]));
@@ -18,11 +19,13 @@ export const Navbar = () => {
                 setRole(null);
             }
         }
-    }, []);
+    }, [token]);
 
     const handleLogoutConfirm = () => {
         localStorage.removeItem("token");
+        setRole(null);
         navigate("/login");
+        setOpen(false);
     };
 
     // Navigation options based on role
@@ -42,9 +45,14 @@ export const Navbar = () => {
         <>
             <nav className="bg-blue-600 px-6 py-4 text-white shadow-md">
                 <div className="flex justify-between items-center">
-                    <Link to="/">
+                    <Link to="/" className="flex items-center gap-2">
+                        <img
+                            src="/logo.png"
+                            alt="Logo"
+                            className="h-14 w-14"
+                        />
                         <h1 className="text-2xl font-bold hover:text-blue-200 transition">
-                            🚛 Vehicle & Driver Panel
+                            FleetRadar
                         </h1>
                     </Link>
 
@@ -57,12 +65,15 @@ export const Navbar = () => {
                             ))}
                         </ul>
 
-                        <button
-                            onClick={() => setOpen(true)}
-                            className="ml-4 bg-white text-blue-600 px-4 py-1.5 rounded-md font-semibold hover:bg-blue-100 transition"
-                        >
-                            Logout
-                        </button>
+                        {role && (
+                            <button
+                                onClick={() => setOpen(true)}
+                                className="ml-4 bg-white text-blue-600 px-4 py-1.5 rounded-md font-semibold hover:bg-blue-100 transition"
+                            >
+                                Logout
+                            </button>
+                        )}
+
                     </div>
                 </div>
             </nav>

@@ -60,10 +60,10 @@ export const Dashboard = () => {
                 <div className="flex justify-between mt-40 space-x-10">
                     <ChartComp
                         type="pie"
-                        title="Araç Durumu"
+                        title="Vehicle Status"
                         data={[
-                            { id: 0, value: emptyVehicles, label: "Boşta", color: "blue" },
-                            { id: 1, value: vehicles.length - emptyVehicles, label: "Atanmış", color: "orange" },
+                            { id: 0, value: emptyVehicles, label: "Empty", color: "blue" },
+                            { id: 1, value: vehicles.length - emptyVehicles, label: "Assigned", color: "orange" },
                         ]}
                     />
 
@@ -82,7 +82,7 @@ export const Dashboard = () => {
 
                 <div className="flex mt-40 justify-evenly">
                     <RecentList
-                        title="Son Eklenen Şoförler"
+                        title="Latest Added Drivers"
                         items={[...drivers].reverse()}
                         primaryKey="name"
                         secondaryKey="licenseNumber"
@@ -91,7 +91,7 @@ export const Dashboard = () => {
 
                     </div>
                     <RecentList
-                        title="Son Atanan Araçlar"
+                        title="Last Assigned Vehicles"
                         items={recentAssignedVehicles}
                         primaryKey="plateNumber"
                         secondaryKey={(item) =>
@@ -105,7 +105,7 @@ export const Dashboard = () => {
 
                     </div>
                     <RecentList
-                        title="Son Eklenen Araçlar"
+                        title="Latest Added Vehicles"
                         items={[...vehicles].reverse()}
                         primaryKey="brand"
                         secondaryKey="plateNumber"
