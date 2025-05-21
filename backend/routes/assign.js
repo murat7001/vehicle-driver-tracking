@@ -20,12 +20,16 @@ router.put('/assign-driver', async (req, res) => {
                 const oldDriver = await Driver.findById(vehicle.assignedDriver);
                 if (oldDriver) {
                     oldDriver.assignedVehicle = null;
+
+                    // 🧨 Konum bilgisini de kaldır
+                    oldDriver.location = undefined;
+
                     await oldDriver.save();
                 }
             }
 
             vehicle.assignedDriver = null;
-            vehicle.assignedAt = null; // 🔴 atama tarihi temizleniyor
+            vehicle.assignedAt = null;
             await vehicle.save();
 
             return res.status(200).json({ message: 'Eşleştirme kaldırıldı', vehicle });
@@ -39,7 +43,7 @@ router.put('/assign-driver', async (req, res) => {
 
         driver.assignedVehicle = vehicle._id;
         vehicle.assignedDriver = driver._id;
-        vehicle.assignedAt = new Date(); // 🟢 atama tarihi kaydediliyor
+        vehicle.assignedAt = new Date();
 
         await driver.save();
         await vehicle.save();
@@ -50,5 +54,6 @@ router.put('/assign-driver', async (req, res) => {
         res.status(500).json({ message: 'Sunucu hatası' });
     }
 });
+
 
 module.exports = router;

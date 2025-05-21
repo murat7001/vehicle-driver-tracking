@@ -9,18 +9,15 @@ import {
     TextField,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
-import { fetchDrivers, fetchVehicles, assignDriver } from "../services/api";
+import { fetchDrivers, assignDriver } from "../services/api";
 
-const AssignDriverModal = ({ open, handleClose, onAssigned }) => {
+const AssignDriverModal = ({ open, handleClose, onAssigned, vehicleData }) => {
     const [drivers, setDrivers] = useState([]);
-    const [vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const driversData = await fetchDrivers();
-            const vehiclesData = await fetchVehicles();
-            setDrivers(driversData.filter(d => !d.assignedVehicle));
-            setVehicles(vehiclesData.filter(v => !v.assignedDriver));
+            setDrivers(driversData.filter((d) => !d.assignedVehicle));
         };
         if (open) fetchData();
     }, [open]);
@@ -39,32 +36,42 @@ const AssignDriverModal = ({ open, handleClose, onAssigned }) => {
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
             <DialogTitle>Assign Driver to Vehicle</DialogTitle>
             <Formik
-                initialValues={{ driverId: "", vehicleId: "" }}
+                initialValues={{
+                    driverId: "",
+                    vehicleId: vehicleData?._id || "",
+                }}
                 onSubmit={handleSubmit}
+                enableReinitialize
             >
                 {({ values, handleChange }) => (
                     <Form>
                         <DialogContent dividers>
-                            <Field as={TextField} select fullWidth name="driverId" label="Select Driver" value={values.driverId} onChange={handleChange} margin="normal" >
-                                {drivers.map((driver) => (
-                                    <MenuItem key={driver._id} value={driver._id}>
-                                        {driver.name} - {driver.licenseNumber}
-                                    </MenuItem>
-                                ))}
-                            </Field>
+                            {/* Araç bilgisi gösteriliyor ama değiştirilemiyor */}
+                            <TextField
+                                fullWidth
+                                label="Selected Vehicle"
+                                value={`${vehicleData?.plateNumber} - ${vehicleData?.brand}`}
+                                margin="normal"
+                                disabled
+                            />
+
+                            {/* Vehicle ID hidden input */}
+                            <Field type="hidden" name="vehicleId" value={vehicleData?._id} />
+
+                            {/* Şoför seçimi */}
                             <Field
                                 as={TextField}
                                 select
                                 fullWidth
-                                name="vehicleId"
-                                label="Select Vehicle"
-                                value={values.vehicleId}
+                                name="driverId"
+                                label="Select Driver"
+                                value={values.driverId}
                                 onChange={handleChange}
                                 margin="normal"
                             >
-                                {vehicles.map((vehicle) => (
-                                    <MenuItem key={vehicle._id} value={vehicle._id}>
-                                        {vehicle.plateNumber} - {vehicle.brand}
+                                {drivers.map((driver) => (
+                                    <MenuItem key={driver._id} value={driver._id}>
+                                        {driver.name} - {driver.licenseNumber}
                                     </MenuItem>
                                 ))}
                             </Field>

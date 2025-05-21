@@ -17,8 +17,6 @@ export default function TableComp({
     onEdit,
     onDelete,
     onAdd,
-    onAssign,
-    onUnassign,
 }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -76,25 +74,6 @@ export default function TableComp({
                                                 );
                                             }
 
-                                            if (column.id === "assignedDriver") {
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {value !== "Empty" ? (
-                                                            <>
-                                                                {value}
-                                                                <button
-                                                                    onClick={() => onUnassign(row)}
-                                                                    className="ml-2 hover:scale-125 transition-transform duration-200"
-                                                                    title="Remove driver"
-                                                                >
-                                                                    ❌
-                                                                </button>
-
-                                                            </>
-                                                        ) : "Empty"}
-                                                    </TableCell>
-                                                );
-                                            }
 
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
@@ -114,11 +93,6 @@ export default function TableComp({
                     <Button onClick={onAdd} variant="contained" color="primary" endIcon={<AddIcon />}>
                         Add
                     </Button>
-                    {tableName === "Vehicles" && (
-                        <Button onClick={onAssign} variant="outlined" color="secondary">
-                            Assign Driver
-                        </Button>
-                    )}
                 </Box>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 15]}

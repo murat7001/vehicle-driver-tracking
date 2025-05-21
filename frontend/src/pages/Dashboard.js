@@ -57,7 +57,7 @@ export const Dashboard = () => {
                     ))}
                 </Grid>
 
-                <div className="flex justify-between mt-40 space-x-10">
+                <div className="mt-40 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
                     <ChartComp
                         type="pie"
                         title="Vehicle Status"
@@ -80,16 +80,14 @@ export const Dashboard = () => {
                     />
                 </div>
 
-                <div className="flex mt-40 justify-evenly">
+                <div className="mt-40 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-64">
                     <RecentList
                         title="Latest Added Drivers"
                         items={[...drivers].reverse()}
                         primaryKey="name"
                         secondaryKey="licenseNumber"
                     />
-                    <div className="m-4">
 
-                    </div>
                     <RecentList
                         title="Last Assigned Vehicles"
                         items={recentAssignedVehicles}
@@ -101,9 +99,6 @@ export const Dashboard = () => {
                         }
                     />
 
-                    <div className="m-4">
-
-                    </div>
                     <RecentList
                         title="Latest Added Vehicles"
                         items={[...vehicles].reverse()}

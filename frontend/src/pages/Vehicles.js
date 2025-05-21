@@ -6,6 +6,8 @@ import { fetchVehicles, updateVehicle, deleteVehicle, addVehicle, assignDriver }
 import * as Yup from 'yup';
 import AddModal from '../components/AddModal';
 import AssignDriverModal from '../components/AssignDriverModal';
+import VehicleCard from '../components/VehicleCard';
+import { Grid } from '@mui/material';
 
 const columns = [
     { id: 'plateNumber', label: 'Plate Number', minWidth: 100 },
@@ -145,6 +147,20 @@ export const Vehicles = () => {
                 onUnassign={handleUnassignClick}
             />
 
+                <Grid container spacing={12} mt={10}>
+                    {vehicles.map((vehicle) => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={vehicle._id}>
+                            <VehicleCard
+                                vehicle={vehicle}
+                                onAssign={() => {
+                                    setAssignOpen(true);
+                                    setSelectedVehicle(vehicle);
+                                }}
+                                onUnassign={handleUnassignClick}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
 
             <EditModal
                 open={modalOpen}
@@ -175,6 +191,7 @@ export const Vehicles = () => {
                 open={assignOpen}
                 handleClose={() => setAssignOpen(false)}
                 onAssigned={fetchData}
+                vehicleData={selectedVehicle}
             />
 
             <ConfirmModal
